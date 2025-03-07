@@ -1,9 +1,13 @@
 package com.alexeiddg.mvcproject.model.object;
+import jakarta.persistence.Entity;
 
 
+@Entity
 public class Paciente extends Usuario {
     private String contacto_emergencia;
     private String historial_medico;
+
+    public Paciente() {}
 
     public Paciente(Long id, String nombre, String rol, String contacto_emergencia, String historial_medico) {
         super(id, nombre, "Paciente");

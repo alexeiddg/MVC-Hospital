@@ -10,7 +10,7 @@ public class Usuario {
     private String nombre;
     private String rol;
 
-    public Usuario () {}
+    public Usuario () {} // No args needed for JPA
 
     public Usuario(Long id, String nombre, String rol) {
         this.id = id;

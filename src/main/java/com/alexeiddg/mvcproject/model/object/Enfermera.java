@@ -1,9 +1,13 @@
 package com.alexeiddg.mvcproject.model.object;
+import jakarta.persistence.Entity;
 
 
+@Entity
 public class Enfermera extends Usuario {
     private String area_asignada;
     private String turno;
+
+    public Enfermera() {}
 
     public Enfermera(Long id, String nombre, String rol, String area_asignada, String turno) {
         super(id, nombre, "Enfermera");

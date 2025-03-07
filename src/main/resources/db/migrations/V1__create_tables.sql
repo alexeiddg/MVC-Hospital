@@ -18,6 +18,7 @@ CREATE TABLE medico (
 );
 
 CREATE TABLE administrador (
+    id INT PRIMARY KEY REFERENCES usuario(id) ON DELETE CASCADE
 );
 
 CREATE TABLE enfermera (
