@@ -5,30 +5,25 @@ CREATE TABLE usuario (
 );
 
 CREATE TABLE paciente (
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY REFERENCES usuario(id) ON DELETE CASCADE,
     contacto_emergencia VARCHAR(100),
     historial_medico VARCHAR(100)
-    -- check if ref needed to usuario --
 );
 
 CREATE TABLE medico (
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY REFERENCES usuario(id) ON DELETE CASCADE,
     especialidad VARCHAR(100),
     horario_trabajo VARCHAR(100),
     licencia_medica VARCHAR(100)
-    -- check if ref needed to usuario --
 );
 
 CREATE TABLE administrador (
-    id SERIAL PRIMARY KEY
-    -- check if ref needed to usuario --
 );
 
 CREATE TABLE enfermera (
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY REFERENCES usuario(id) ON DELETE CASCADE,
     area_asignada VARCHAR(100),
     turno VARCHAR(100)
-    -- check if ref needed to usuario --
 );
 
 CREATE TABLE cita (
@@ -36,7 +31,7 @@ CREATE TABLE cita (
     fecha VARCHAR(100),
     hora VARCHAR(100),
     motivoConsulta VARCHAR(100),
-    estado VARCHAR(100)
-    -- add ref to medic --
-    -- add ref to paciente --
+    estado VARCHAR(100),
+    medico_id INT REFERENCES medico(id) ON DELETE CASCADE,
+    paciente_id INT REFERENCES paciente(id) ON DELETE CASCADE
 );
