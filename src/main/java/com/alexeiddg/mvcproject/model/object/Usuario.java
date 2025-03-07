@@ -1,14 +1,11 @@
 package com.alexeiddg.mvcproject.model.object;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED) // Separate tables, linked by ID
 public class Usuario {
-    // PK - Auto-gen ids
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // PK - Auto-gen ids
     private Long id;
     private String nombre;
     private String rol;
