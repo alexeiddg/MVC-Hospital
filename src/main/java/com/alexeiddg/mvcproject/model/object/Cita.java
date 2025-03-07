@@ -8,16 +8,16 @@ public class Cita {
     private Long id;
     private String fecha;
     private String hora;
-    private String motivoConsulta;
+    private String motivo_consulta;
     private String estado;
 
     public Cita() {}
 
-    public Cita(Long id, String fecha, String hora, String motivoConsulta, String estado) {
+    public Cita(Long id, String fecha, String hora, String motivo_consulta, String estado) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
-        this.motivoConsulta = motivoConsulta;
+        this.motivo_consulta = motivo_consulta;
         this.estado = estado;
     }
 
@@ -34,8 +34,8 @@ public class Cita {
         return hora;
     }
 
-    public String getMotivoConsulta() {
-        return motivoConsulta;
+    public String getMotivo_consulta() {
+        return motivo_consulta;
     }
 
     public String getEstado() {
@@ -56,8 +56,8 @@ public class Cita {
         this.hora = hora;
     }
 
-    public void setMotivoConsulta(String motivoConsulta) {
-        this.motivoConsulta = motivoConsulta;
+    public void setMotivo_consulta(String motivo_consulta) {
+        this.motivo_consulta = motivo_consulta;
     }
 
     public void setEstado(String estado) {

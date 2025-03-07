@@ -30,7 +30,7 @@ CREATE TABLE cita (
     id SERIAL PRIMARY KEY,
     fecha VARCHAR(100),
     hora VARCHAR(100),
-    motivoConsulta VARCHAR(100),
+    motivo_consulta VARCHAR(100),
     estado VARCHAR(100),
     medico_id INT REFERENCES medico(id) ON DELETE CASCADE,
     paciente_id INT REFERENCES paciente(id) ON DELETE CASCADE

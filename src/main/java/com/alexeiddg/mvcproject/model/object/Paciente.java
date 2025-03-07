@@ -2,29 +2,29 @@ package com.alexeiddg.mvcproject.model.object;
 
 
 public class Paciente extends Usuario {
-    private String contactoEmergencia;
-    private String historialMedico;
+    private String contacto_emergencia;
+    private String historial_medico;
 
-    public Paciente(Long id, String nombre, String rol, String contactoEmergencia, String historialMedico) {
+    public Paciente(Long id, String nombre, String rol, String contacto_emergencia, String historial_medico) {
         super(id, nombre, "Paciente");
-        this.contactoEmergencia = contactoEmergencia;
-        this.historialMedico = historialMedico;
+        this.contacto_emergencia = contacto_emergencia;
+        this.historial_medico = historial_medico;
     }
 
-    public String getContactoEmergencia() {
-        return contactoEmergencia;
+    public String getContacto_emergencia() {
+        return contacto_emergencia;
     }
 
-    public void setContactoEmergencia(String contactoEmergencia) {
-        this.contactoEmergencia = contactoEmergencia;
+    public void setContacto_emergencia(String contacto_emergencia) {
+        this.contacto_emergencia = contacto_emergencia;
     }
 
-    public String getHistorialMedico() {
-        return historialMedico;
+    public String getHistorial_medico() {
+        return historial_medico;
     }
 
-    public void setHistorialMedico(String historialMedico) {
-        this.historialMedico = historialMedico;
+    public void setHistorial_medico(String historial_medico) {
+        this.historial_medico = historial_medico;
     }
 
 }
