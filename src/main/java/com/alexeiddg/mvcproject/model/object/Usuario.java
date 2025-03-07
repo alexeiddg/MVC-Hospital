@@ -1,19 +1,28 @@
 package com.alexeiddg.mvcproject.model.object;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+
+@Entity
 public class Usuario {
-    private String id;
+    // PK - Auto-gen ids
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nombre;
     private String rol;
 
-    // Constructor
-    public Usuario(String id, String nombre, String rol) {
+    public Usuario () {}
+
+    public Usuario(Long id, String nombre, String rol) {
         this.id = id;
         this.nombre = nombre;
         this.rol = rol;
     }
 
     // Getters
-    public String getIdUsuario() {
+    public Long getId() {
         return id;
     }
 
@@ -26,7 +35,7 @@ public class Usuario {
     }
 
     // Setters
-    public void setIdUsuario(String idUsuario) {
+    public void setId(Long idUsuario) {
         this.id = idUsuario;
     }
 
@@ -37,4 +46,5 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
+
 }

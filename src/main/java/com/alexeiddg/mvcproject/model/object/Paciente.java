@@ -1,10 +1,11 @@
 package com.alexeiddg.mvcproject.model.object;
 
+
 public class Paciente extends Usuario {
     private String contactoEmergencia;
     private String historialMedico;
 
-    public Paciente(String id, String nombre, String rol, String contactoEmergencia, String historialMedico) {
+    public Paciente(Long id, String nombre, String rol, String contactoEmergencia, String historialMedico) {
         super(id, nombre, "Paciente");
         this.contactoEmergencia = contactoEmergencia;
         this.historialMedico = historialMedico;

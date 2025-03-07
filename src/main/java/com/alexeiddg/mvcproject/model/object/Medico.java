@@ -1,11 +1,12 @@
 package com.alexeiddg.mvcproject.model.object;
 
+
 public class Medico extends Usuario {
     private String especialidad;
     private String horario_trabajo;
     private String licencia_medica;
 
-    public Medico(String id, String nombre, String rol, String especialidad, String horario_trabajo, String licencia_medica) {
+    public Medico(Long id, String nombre, String rol, String especialidad, String horario_trabajo, String licencia_medica) {
         super(id, nombre, "Medico");
         this.especialidad = especialidad;
         this.horario_trabajo = horario_trabajo;

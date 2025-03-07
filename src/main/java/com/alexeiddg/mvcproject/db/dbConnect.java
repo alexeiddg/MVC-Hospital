@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class dbConnect {
     private static final String URL = "jdbc:postgresql://aws-0-us-west-1.pooler.supabase.com:6543/postgres?user=postgres.urgsmsgmrukvxotplwsy&password=!Welcome12345!";
     private static final String USER = "admin";
