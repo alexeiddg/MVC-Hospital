@@ -1,3 +1,6 @@
+-- this is a schema as a guide to what it should look like --
+-- !! Migrations are made from JPA entities, not this file !!--
+
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
