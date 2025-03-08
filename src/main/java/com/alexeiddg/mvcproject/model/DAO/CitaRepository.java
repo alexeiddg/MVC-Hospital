@@ -13,6 +13,14 @@ import java.util.List;
 public interface CitaRepository extends JpaRepository<Cita, Long> {
 
     // get citas de enfermera
-    @Query("SELECT c FROM Cita c WHERE c.enfermera.id = :id")
-    List<Cita> getCitasByEnfermeraId(@Param("id") Long enfermeraId);
+    @Query("SELECT c FROM Cita c WHERE c.enfermera.id = :enfermeraId")
+    List<Cita> getCitasByEnfermeraId(@Param("enfermeraId") Long enfermeraId);
+
+    // get citas de medico
+    @Query("SELECT c FROM Cita c WHERE c.medico.id = :medicoId")
+    List<Cita> getCitasByMedicoId(@Param("medicoId") Long medicoId);
+
+    // get citas de paciente
+    @Query("SELECT c FROM Cita c WHERE c.paciente.id = :pacienteId")
+    List<Cita> getCitasByPacienteId(@Param("pacienteId") Long pacienteId);
 }
