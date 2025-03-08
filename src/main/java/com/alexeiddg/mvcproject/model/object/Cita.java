@@ -17,6 +17,9 @@ public class Cita {
     @ManyToOne
     private Paciente paciente;
 
+    @ManyToOne
+    private Enfermera enfermera;
+
     public Cita() {}
 
     public Cita(Long id, String fecha, String hora, String motivo_consulta, String estado, Medico medico, Paciente paciente) {

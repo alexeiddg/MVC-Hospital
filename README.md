@@ -1,6 +1,7 @@
 temp notes 
 Program Notes:
 - The db is created and dropped each time the spring boot application is run
+- The application's focus is simulating a patient creating an appointment with a doctor
 
 Workflow for the Enfermera class
 - CRUD for enfermeras
