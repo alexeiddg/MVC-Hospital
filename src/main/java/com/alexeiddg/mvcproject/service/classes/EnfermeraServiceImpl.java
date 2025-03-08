@@ -1,5 +1,6 @@
 package com.alexeiddg.mvcproject.service.classes;
 
+import com.alexeiddg.mvcproject.model.DAO.CitaRepository;
 import com.alexeiddg.mvcproject.model.DAO.EnfermeraRepository;
 import com.alexeiddg.mvcproject.model.object.Cita;
 import com.alexeiddg.mvcproject.model.object.Enfermera;
@@ -12,9 +13,11 @@ import java.util.Optional;
 @Service
 public class EnfermeraServiceImpl implements EnfermeraService {
     private final EnfermeraRepository enfermeraRepository;
+    private final CitaRepository citaRepository;
 
-    public EnfermeraServiceImpl(EnfermeraRepository enfermeraRepository) {
+    public EnfermeraServiceImpl(EnfermeraRepository enfermeraRepository, CitaRepository citaRepository) {
         this.enfermeraRepository = enfermeraRepository;
+        this.citaRepository = citaRepository;
     }
 
     @Override
@@ -39,6 +42,6 @@ public class EnfermeraServiceImpl implements EnfermeraService {
 
     @Override
     public List<Cita> getCitasByEnfermeraId(Long enfermeraId) {
-        return enfermeraRepository.getCitasByEnfermeraId(enfermeraId);
+        return citaRepository.getCitasByEnfermeraId(enfermeraId);
     }
 }

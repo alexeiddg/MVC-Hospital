@@ -12,8 +12,5 @@ import java.util.List;
 
 @Repository
 public interface EnfermeraRepository extends JpaRepository<Enfermera, Long> {
-
-    // get citas de enfermera
-    @Query("SELECT c FROM Cita c WHERE c.enfermera.id = :id")
-    List<Cita> getCitasByEnfermeraId(@Param("id") Long enfermeraId);
+    // WIP
 }
