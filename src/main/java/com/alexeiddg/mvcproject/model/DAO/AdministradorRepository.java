@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
-    // Unused As Of Now
+    // Basic CRUD impl
 }
