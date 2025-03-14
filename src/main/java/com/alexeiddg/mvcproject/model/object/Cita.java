@@ -12,24 +12,24 @@ public class Cita {
     private String estado;
 
     @ManyToOne
-    private Medico medico;
+    private Long medicoId;
 
     @ManyToOne
-    private Paciente paciente;
+    private Long pacienteId;
 
     @ManyToOne
     private Enfermera enfermera;
 
     public Cita() {}
 
-    public Cita(Long id, String fecha, String hora, String motivo_consulta, String estado, Medico medico, Paciente paciente) {
+    public Cita(Long id, String fecha, String hora, String motivo_consulta, String estado, Long medicoId, Long pacienteId) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
         this.motivo_consulta = motivo_consulta;
         this.estado = estado;
-        this.medico = medico;
-        this.paciente = paciente;
+        this.medicoId = medicoId;
+        this.pacienteId = pacienteId;
     }
 
     // Getters

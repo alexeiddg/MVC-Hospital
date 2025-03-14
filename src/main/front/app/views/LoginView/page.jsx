@@ -23,12 +23,14 @@ export default function LoginView() {
     try {
       const mockCheckCredentials = () => {
         if (credentials.email === 'doctor@example.com' && credentials.password === 'password') {
-          return { success: true, role: 'doctor', id: 201 };
-        } else if (credentials.email === 'patient@example.com' && credentials.password === 'password') {
+          return { success: true, role: 'doctor', id: 1 };
+        } else if (credentials.email === 'paciente@example.com' && credentials.password === 'password') {
           return { success: true, role: 'paciente', id: 3 };
         } else if (credentials.email === 'admin@example.com' && credentials.password === 'password') {
           return { success: true, role: 'admin', id: 1 };
-        }
+        } else if (credentials.email === 'enfermera@example.com' && credentials.password === 'password') {
+          return { success: true, role: 'enfermera', id: 4 };
+        }  
         return { success: false, message: 'Credenciales inválidas' };
       };
 
@@ -41,7 +43,6 @@ export default function LoginView() {
           email: credentials.email
         }));
 
-        // Redirect based on role
         switch (result.role) {
           case 'doctor':
             router.push('/views/MedicoView');
@@ -173,13 +174,25 @@ export default function LoginView() {
             <p className="mb-2">Credenciales de demostración:</p>
             <div className="grid grid-cols-2 gap-2 text-xs text-left">
               <div className="bg-gray-50 p-2 rounded">
-                <strong>Doctor:</strong><br />
+                <strong>Medico:</strong><br />
                 doctor@example.com<br />
                 password
               </div>
               <div className="bg-gray-50 p-2 rounded">
                 <strong>Paciente:</strong><br />
-                patient@example.com<br />
+                paciente@example.com<br />
+                password
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs text-left">
+              <div className="bg-gray-50 p-2 rounded">
+                <strong>Enfermera:</strong><br />
+                enfermera@example.com<br />
+                password
+              </div>
+              <div className="bg-gray-50 p-2 rounded">
+                <strong>Administrador:</strong><br />
+                admin@example.com<br />
                 password
               </div>
             </div>

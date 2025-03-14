@@ -6,7 +6,7 @@ import PacienteService from '../../../services/pacienteService';
 import MedicoService from '../../../services/medicoService';
 import EnfermeraService from '../../../services/enfermeraService';
 import CitaService from '../../../services/citaService';
-import {router} from "next/client";
+import { useRouter } from 'next/navigation';
 
 export default function NewCitaForm() {
   const searchParams = useSearchParams();
@@ -29,12 +29,12 @@ export default function NewCitaForm() {
   const [loadingPatients, setLoadingPatients] = useState(true);
   const [errorPatients, setErrorPatients] = useState(null);
 
-  const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [selectedPatient, setSelectedPatient] = useState(
-      searchParams.get('pacienteId') || ''
-  );
-  const [selectedNurse, setSelectedNurse] = useState('');
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(searchParams.get('pacienteId') ? Number(searchParams.get('pacienteId')) : null);
+  const [selectedNurse, setSelectedNurse] = useState(null);
   const [patientInfo, setPatientInfo] = useState(null);
+  const router = useRouter();
+
 
   useEffect(() => {
     MedicoService.getAllMedicos()
@@ -94,30 +94,59 @@ export default function NewCitaForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const newCita = {
       fecha,
       hora,
       motivo_consulta: motivoConsulta,
       estado,
-      medico: { id: selectedDoctor },
-      paciente: { id: selectedPatient },
-      enfermera: { id: selectedNurse },
+      medicoId: selectedDoctor ? Number(selectedDoctor) : null,
+      pacienteId: selectedPatient ? Number(selectedPatient) : null,
+      enfermeraId: selectedNurse ? Number(selectedNurse) : null,
     };
-
+  
+    console.log("Datos enviados al backend:", JSON.stringify(newCita, null, 2));
+  
     try {
       const result = await CitaService.addCita(newCita);
       console.log('New Cita created:', result);
+      
+      // Get user data from localStorage
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        
+        // Route based on user role
+        switch(user.role) {
+          case 'paciente':
+            router.push("/views/PacienteView");
+            break;
+          case 'enfermera':
+            router.push("/views/EnfermeraView");
+            break;
+          case 'doctor':
+            router.push("/views/MedicoView");
+            break;
+          default:
+            // Default fallback route if role is not recognized
+            router.push("/");
+            break;
+        }
+      } else {
+        // If no user is found in localStorage, default to a general view
+        router.push("/");
+      }
     } catch (error) {
       console.error('Error creating cita:', error);
     }
-
+  
     setFecha('');
     setHora('');
     setMotivoConsulta('');
     setEstado('Pendiente');
-    router.push("/views/PacienteView")
   };
+
+
 
   return (
       <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-md">
@@ -174,7 +203,7 @@ export default function NewCitaForm() {
             ) : (
                 <select
                     value={selectedDoctor}
-                    onChange={(e) => setSelectedDoctor(e.target.value)}
+                    onChange={(e) => setSelectedDoctor(Number(e.target.value))}
                     className="w-full p-2 border rounded"
                 >
                   {doctors.map((doc) => (
@@ -201,7 +230,7 @@ export default function NewCitaForm() {
             ) : (
                 <select
                     value={selectedPatient}
-                    onChange={(e) => setSelectedPatient(e.target.value)}
+                    onChange={(e) => setSelectedPatient(Number(e.target.value))}
                     className="w-full p-2 border rounded"
                 >
                   {patients.map((pat) => (
@@ -221,7 +250,7 @@ export default function NewCitaForm() {
             ) : (
                 <select
                     value={selectedNurse}
-                    onChange={(e) => setSelectedNurse(e.target.value)}
+                    onChange={(e) => setSelectedNurse(Number(e.target.value))}
                     className="w-full p-2 border rounded"
                 >
                   {nurses.map((nurse) => (
