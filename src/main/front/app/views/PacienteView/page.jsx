@@ -57,8 +57,7 @@ export default function PacienteView() {
   const handleRequestAppointment = async (e) => {
     e.preventDefault()
     if (newAppointmentDate) {
-      router.push(`/views/CitaView?date=${encodeURIComponent(newAppointmentDate)}`);
-    }
+      router.push(`/views/CitaView?date=${encodeURIComponent(newAppointmentDate)}&pacienteId=${encodeURIComponent(patientId)}`);    }
   };
 
   return (

@@ -1,233 +1,246 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import PacienteService from '../../../services/pacienteService';
+import MedicoService from '../../../services/medicoService';
+import EnfermeraService from '../../../services/enfermeraService';
+import CitaService from '../../../services/citaService';
+import {router} from "next/client";
 
-export default function CitaView({ userType = 'doctor', userId = 201 }) {
-  // State for the selected appointment
-  const [currentAppointment, setCurrentAppointment] = useState(null);
-  
-  // Mock data for doctors and patients that would normally come from your database
-  const doctors = [
-    { id: 201, nombre: 'Dr. García', especialidad: 'Cardiología' },
-    { id: 202, nombre: 'Dra. Rodríguez', especialidad: 'Pediatría' }
-  ];
-  
-  const patients = [
-    { id: 101, nombre: 'Ana Martínez', email: 'ana@example.com' },
-    { id: 102, nombre: 'Carlos Sánchez', email: 'carlos@example.com' },
-    { id: 103, nombre: 'Elena López', email: 'elena@example.com' }
-  ];
-  
-  // State for appointments using the DB schema structure
-  const [appointments, setAppointments] = useState([
-    { 
-      id: 1, 
-      fecha: '2025-03-15', 
-      hora: '10:00', 
-      motivo_consulta: 'Control anual cardiovascular',
-      estado: 'Pendiente',
-      medico_id: 201,
-      paciente_id: 101
-    },
-    { 
-      id: 2, 
-      fecha: '2025-03-15', 
-      hora: '11:00', 
-      motivo_consulta: 'Dolor en el pecho',
-      estado: 'Confirmada',
-      medico_id: 201,
-      paciente_id: 102
-    },
-    { 
-      id: 3, 
-      fecha: '2025-03-16', 
-      hora: '09:00', 
-      motivo_consulta: 'Fiebre alta en niño de 5 años',
-      estado: 'Pendiente',
-      medico_id: 202,
-      paciente_id: 103
-    }
-  ]);
+export default function NewCitaForm() {
+  const searchParams = useSearchParams();
+  const initialFecha = searchParams.get('date') || '';
 
-  // Helper functions to get doctor and patient info by ID
-  const getDoctorById = (id) => doctors.find(doc => doc.id === id) || { nombre: 'Doctor desconocido', especialidad: 'N/A' };
-  const getPatientById = (id) => patients.find(pat => pat.id === id) || { nombre: 'Paciente desconocido', email: 'N/A' };
+  const [fecha, setFecha] = useState(initialFecha);
+  const [hora, setHora] = useState('');
+  const [motivoConsulta, setMotivoConsulta] = useState('');
+  const [estado, setEstado] = useState('Pendiente');
 
-  // Function to confirm appointment
-  const confirmarCita = (id) => {
-    setAppointments(appointments.map(appointment => 
-      appointment.id === id ? {...appointment, estado: 'Confirmada'} : appointment
-    ));
-    
-    if (currentAppointment && currentAppointment.id === id) {
-      setCurrentAppointment({...currentAppointment, estado: 'Confirmada'});
-    }
-  };
+  const [doctors, setDoctors] = useState([]);
+  const [loadingDoctors, setLoadingDoctors] = useState(true);
+  const [errorDoctors, setErrorDoctors] = useState(null);
 
-  // Function to cancel appointment
-  const cancelarCita = (id) => {
-    setAppointments(appointments.map(appointment => 
-      appointment.id === id ? {...appointment, estado: 'Cancelada'} : appointment
-    ));
-    
-    if (currentAppointment && currentAppointment.id === id) {
-      setCurrentAppointment({...currentAppointment, estado: 'Cancelada'});
-    }
-  };
+  const [nurses, setNurses] = useState([]);
+  const [loadingNurses, setLoadingNurses] = useState(true);
+  const [errorNurses, setErrorNurses] = useState(null);
 
-  // Filter appointments based on user type and ID
-  const filteredAppointments = userType === 'doctor' 
-    ? appointments.filter(app => app.medico_id === userId)
-    : appointments.filter(app => app.paciente_id === userId);
+  const [patients, setPatients] = useState([]);
+  const [loadingPatients, setLoadingPatients] = useState(true);
+  const [errorPatients, setErrorPatients] = useState(null);
 
-  // Set default selected appointment
+  const [selectedDoctor, setSelectedDoctor] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState(
+      searchParams.get('pacienteId') || ''
+  );
+  const [selectedNurse, setSelectedNurse] = useState('');
+  const [patientInfo, setPatientInfo] = useState(null);
+
   useEffect(() => {
-    if (filteredAppointments.length > 0 && !currentAppointment) {
-      setCurrentAppointment(filteredAppointments[0]);
-    }
-  }, [filteredAppointments, currentAppointment]);
+    MedicoService.getAllMedicos()
+        .then((data) => {
+          setDoctors(data);
+          setLoadingDoctors(false);
+          if (data && data.length > 0) {
+            setSelectedDoctor(data[0].id);
+          }
+        })
+        .catch((err) => {
+          console.error('Error fetching doctors:', err);
+          setErrorDoctors(err);
+          setLoadingDoctors(false);
+        });
+  }, []);
 
-  // Get status badge style
-  const getStatusBadgeClass = (status) => {
-    switch(status) {
-      case 'Confirmada': return 'bg-green-100 text-green-800';
-      case 'Cancelada': return 'bg-red-100 text-red-800';
-      default: return 'bg-yellow-100 text-yellow-800';
+  useEffect(() => {
+    EnfermeraService.getAllEnfermeras()
+        .then((data) => {
+          setNurses(data);
+          setLoadingNurses(false);
+          if (data && data.length > 0) {
+            setSelectedNurse(data[0].id);
+          }
+        })
+        .catch((err) => {
+          console.error('Error fetching nurses:', err);
+          setErrorNurses(err);
+          setLoadingNurses(false);
+        });
+  }, []);
+
+  useEffect(() => {
+    PacienteService.getAllPacientes()
+        .then((data) => {
+          setPatients(data);
+          setLoadingPatients(false);
+          if (!selectedPatient && data.length > 0) {
+            setSelectedPatient(data[0].id);
+          }
+        })
+        .catch((err) => {
+          console.error('Error fetching patients:', err);
+          setErrorPatients(err);
+          setLoadingPatients(false);
+        });
+  }, []);
+
+  useEffect(() => {
+    if (selectedPatient) {
+      PacienteService.getPacienteById(selectedPatient)
+          .then((data) => setPatientInfo(data))
+          .catch((err) => console.error('Error fetching patient info:', err));
     }
+  }, [selectedPatient]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newCita = {
+      fecha,
+      hora,
+      motivo_consulta: motivoConsulta,
+      estado,
+      medico: { id: selectedDoctor },
+      paciente: { id: selectedPatient },
+      enfermera: { id: selectedNurse },
+    };
+
+    try {
+      const result = await CitaService.addCita(newCita);
+      console.log('New Cita created:', result);
+    } catch (error) {
+      console.error('Error creating cita:', error);
+    }
+
+    setFecha('');
+    setHora('');
+    setMotivoConsulta('');
+    setEstado('Pendiente');
+    router.push("/views/PacienteView")
   };
 
   return (
-    <div className="flex flex-col md:flex-row p-6 max-w-6xl mx-auto gap-6">
-      {/* Appointments List Panel */}
-      <div className="w-full md:w-1/3 bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-4">
-          {userType === 'doctor' ? 'Mis Pacientes' : 'Mis Citas'}
-        </h2>
-        
-        <div className="space-y-2">
-          {filteredAppointments.map(appointment => {
-            const patientInfo = getPatientById(appointment.paciente_id);
-            const doctorInfo = getDoctorById(appointment.medico_id);
-            
-            return (
-              <div 
-                key={appointment.id}
-                onClick={() => setCurrentAppointment(appointment)}
-                className={`p-3 rounded-md cursor-pointer transition-colors ${
-                  currentAppointment && currentAppointment.id === appointment.id 
-                    ? 'bg-blue-100 border-l-4 border-blue-500' 
-                    : 'hover:bg-gray-100'
-                }`}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-medium">
-                      {userType === 'doctor' ? patientInfo.nombre : doctorInfo.nombre}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {appointment.fecha} - {appointment.hora}
-                    </p>
-                  </div>
-                  <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadgeClass(appointment.estado)}`}>
-                    {appointment.estado}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Appointment Details Panel */}
-      {currentAppointment && (
-        <div className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow-md">
-          <div className="flex justify-between items-start mb-6">
-            <h2 className="text-xl font-bold">Detalles de la Cita</h2>
-            <span className={`px-3 py-1 rounded-full text-sm ${getStatusBadgeClass(currentAppointment.estado)}`}>
-              {currentAppointment.estado}
-            </span>
+      <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-6">Crear Nueva Cita</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 mb-2">Fecha</label>
+            <input
+                type="date"
+                value={fecha}
+                onChange={(e) => setFecha(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+            />
           </div>
-
-          {currentAppointment && (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-2">Información del Paciente</h3>
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    {(() => {
-                      const patient = getPatientById(currentAppointment.paciente_id);
-                      return (
-                        <>
-                          <p className="font-medium">{patient.nombre}</p>
-                          <p className="text-sm text-gray-600">{patient.email}</p>
-                          <p className="text-sm text-gray-600">ID: {currentAppointment.paciente_id}</p>
-                        </>
-                      );
-                    })()}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-2">Información del Médico</h3>
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    {(() => {
-                      const doctor = getDoctorById(currentAppointment.medico_id);
-                      return (
-                        <>
-                          <p className="font-medium">{doctor.nombre}</p>
-                          <p className="text-sm text-gray-600">{doctor.especialidad}</p>
-                          <p className="text-sm text-gray-600">ID: {currentAppointment.medico_id}</p>
-                        </>
-                      );
-                    })()}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-700 mb-2">Detalles de la Consulta</h3>
-                <div className="bg-gray-50 p-4 rounded-md">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <p className="text-sm text-gray-500">Fecha</p>
-                      <p>{currentAppointment.fecha}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Hora</p>
-                      <p>{currentAppointment.hora}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Motivo de la Consulta</p>
-                    <p className="mt-1">{currentAppointment.motivo_consulta}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-end space-x-3">
-                {currentAppointment.estado === 'Pendiente' && (
-                  <button
-                    onClick={() => confirmarCita(currentAppointment.id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
-                  >
-                    Confirmar Cita
-                  </button>
-                )}
-                
-                {currentAppointment.estado !== 'Cancelada' && (
-                  <button
-                    onClick={() => cancelarCita(currentAppointment.id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
-                  >
-                    Cancelar Cita
-                  </button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-    </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Hora</label>
+            <input
+                type="time"
+                value={hora}
+                onChange={(e) => setHora(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Motivo de la Consulta</label>
+            <textarea
+                value={motivoConsulta}
+                onChange={(e) => setMotivoConsulta(e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Describe el motivo de la consulta"
+                required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Estado</label>
+            <select
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                className="w-full p-2 border rounded"
+            >
+              <option value="Pendiente">Pendiente</option>
+              <option value="Confirmada">Confirmada</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Médico</label>
+            {loadingDoctors ? (
+                <p>Cargando médicos...</p>
+            ) : errorDoctors ? (
+                <p>Error al cargar médicos.</p>
+            ) : (
+                <select
+                    value={selectedDoctor}
+                    onChange={(e) => setSelectedDoctor(e.target.value)}
+                    className="w-full p-2 border rounded"
+                >
+                  {doctors.map((doc) => (
+                      <option key={doc.id} value={doc.id}>
+                        {doc.nombre} - {doc.especialidad}
+                      </option>
+                  ))}
+                </select>
+            )}
+          </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Paciente</label>
+            {loadingPatients ? (
+                <p>Cargando pacientes...</p>
+            ) : errorPatients ? (
+                <p>Error al cargar pacientes.</p>
+            ) : patientInfo ? (
+                <input
+                    type="text"
+                    value={patientInfo.nombre}
+                    disabled
+                    className="w-full p-2 border rounded"
+                />
+            ) : (
+                <select
+                    value={selectedPatient}
+                    onChange={(e) => setSelectedPatient(e.target.value)}
+                    className="w-full p-2 border rounded"
+                >
+                  {patients.map((pat) => (
+                      <option key={pat.id} value={pat.id}>
+                        {pat.nombre}
+                      </option>
+                  ))}
+                </select>
+            )}
+          </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Enfermera</label>
+            {loadingNurses ? (
+                <p>Cargando enfermeras...</p>
+            ) : errorNurses ? (
+                <p>Error al cargar enfermeras.</p>
+            ) : (
+                <select
+                    value={selectedNurse}
+                    onChange={(e) => setSelectedNurse(e.target.value)}
+                    className="w-full p-2 border rounded"
+                >
+                  {nurses.map((nurse) => (
+                      <option key={nurse.id} value={nurse.id}>
+                        {nurse.nombre}
+                      </option>
+                  ))}
+                </select>
+            )}
+          </div>
+          <div>
+            <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Crear Cita
+            </button>
+          </div>
+        </form>
+      </div>
   );
 }
