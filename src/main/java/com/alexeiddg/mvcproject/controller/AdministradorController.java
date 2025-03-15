@@ -11,6 +11,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/administrador")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdministradorController {
     private final AdministradorService administradorService;
 
@@ -21,6 +22,7 @@ public class AdministradorController {
     // Medicos Workflow
     @GetMapping("/medicos")
     public ResponseEntity<List<Medico>> getAllMedicos() {
+        System.out.println("getAllMedicos");
         return ResponseEntity.ok(administradorService.getAllMedicos());
     }
 
