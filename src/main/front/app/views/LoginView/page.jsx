@@ -12,47 +12,35 @@ export default function LoginView() {
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
-    setError(''); // Clear any previous errors when user types
+    setError('');
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
-      // This would be replaced with your actual API call
-      // const response = await fetch('/api/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(credentials)
-      // });
-      // const data = await response.json();
-      
-      // Mock authentication for demonstration
-      // In a real app, you would validate credentials against your backend
       const mockCheckCredentials = () => {
-        // Demo credentials for different user types
         if (credentials.email === 'doctor@example.com' && credentials.password === 'password') {
           return { success: true, role: 'doctor', id: 201 };
         } else if (credentials.email === 'patient@example.com' && credentials.password === 'password') {
-          return { success: true, role: 'paciente', id: 101 };
+          return { success: true, role: 'paciente', id: 3 };
         } else if (credentials.email === 'admin@example.com' && credentials.password === 'password') {
           return { success: true, role: 'admin', id: 1 };
         }
         return { success: false, message: 'Credenciales inválidas' };
       };
-      
+
       const result = mockCheckCredentials();
-      
+
       if (result.success) {
-        // Store user info in localStorage or a state management solution
         localStorage.setItem('user', JSON.stringify({
           role: result.role,
           id: result.id,
           email: credentials.email
         }));
-        
+
         // Redirect based on role
         switch (result.role) {
           case 'doctor':
@@ -86,25 +74,15 @@ export default function LoginView() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
+
     try {
-      // This would be your actual API call to register a user
-      // const response = await fetch('/api/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(credentials)
-      // });
-      // const data = await response.json();
-      
-      // Mock registration for demonstration
       setTimeout(() => {
-        // Simulating a successful registration
         setIsRegistering(false);
         setCredentials({ ...credentials });
         alert('Registro exitoso. Por favor inicie sesión con sus credenciales.');
         setIsLoading(false);
       }, 1000);
-      
+
     } catch (err) {
       setError('Error al registrar. Por favor intente nuevamente.');
       console.error('Registration error:', err);
@@ -118,13 +96,13 @@ export default function LoginView() {
         <h1 className="text-2xl font-bold mb-6 text-center">
           {isRegistering ? 'Registrar Cuenta' : 'Iniciar Sesión'}
         </h1>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={isRegistering ? handleRegister : handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2" htmlFor="email">
@@ -141,7 +119,7 @@ export default function LoginView() {
               disabled={isLoading}
             />
           </div>
-          
+
           <div className="mb-6">
             <label className="block text-gray-700 mb-2" htmlFor="password">
               Contraseña
@@ -157,9 +135,9 @@ export default function LoginView() {
               disabled={isLoading}
             />
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className={`w-full ${isLoading ? 'bg-blue-300' : 'bg-blue-500 hover:bg-blue-600'} text-white p-2 rounded flex justify-center items-center`}
             disabled={isLoading}
           >
@@ -176,7 +154,7 @@ export default function LoginView() {
             )}
           </button>
         </form>
-        
+
         <div className="mt-4 text-center">
           <button
             className="text-blue-500 hover:underline"
@@ -189,7 +167,7 @@ export default function LoginView() {
             {isRegistering ? '¿Ya tienes una cuenta? Inicia sesión' : '¿Necesitas una cuenta? Regístrate'}
           </button>
         </div>
-        
+
         {!isRegistering && (
           <div className="mt-6 text-center text-sm text-gray-600">
             <p className="mb-2">Credenciales de demostración:</p>
