@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/paciente")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PacienteController {
     private final PacienteService pacienteService;
 
@@ -46,6 +47,7 @@ public class PacienteController {
 
     @PostMapping("/add/cita")
     public ResponseEntity<Cita> addCita(@RequestBody Cita cita) {
+        System.out.println("si llego");
         pacienteService.addCita(cita);
         return ResponseEntity.ok(cita);
     }

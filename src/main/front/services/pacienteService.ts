@@ -80,7 +80,7 @@ export const PacienteService = {
     // Agregar una cita
     addCita: async (cita: any) => {
         try {
-            const response = await fetch(`${BASE_URL}/add/cita`, {
+            const response = await fetch(`http://localhost:8080/api/cita/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(cita),

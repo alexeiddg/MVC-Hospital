@@ -46,10 +46,12 @@ export default function PacienteView() {
           time: '09:00',
           doctor: 'Pending Assignment',
           status: 'Requested',
-          pacienteId: id, // Usar ID dinámico
+          pacienteId: id,
         };
-
-        await PacienteService.addCita(newAppointment); // Using PacienteService
+  
+        console.log("Sending appointment:", newAppointment); // <-- Agrega esto
+  
+        await PacienteService.addCita(newAppointment);
         fetchAppointments(id);
         setNewAppointmentDate('');
       } catch (error) {
@@ -57,6 +59,7 @@ export default function PacienteView() {
       }
     }
   };
+  
 
   return (
     <div className="p-6 max-w-4xl mx-auto">

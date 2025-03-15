@@ -11,6 +11,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/administrador")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdministradorController {
     private final AdministradorService administradorService;
 

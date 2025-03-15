@@ -1,3 +1,5 @@
+Cesar Simental Duenas A01641385
+Alexei Delgado De Gante  A01637405
 temp notes 
 Program Notes:
 - The db is created and dropped each time the spring boot application is run
