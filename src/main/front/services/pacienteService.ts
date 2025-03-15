@@ -1,10 +1,7 @@
 const BASE_URL = 'http://localhost:8080/api/paciente';
 
-/**
- * Service to handle all paciente-related API calls
- */
 export const PacienteService = {
-    // Obtener todos los pacientes
+
     getAllPacientes: async () => {
         try {
             const response = await fetch(`${BASE_URL}/getall`);
@@ -18,7 +15,6 @@ export const PacienteService = {
         }
     },
 
-    // Obtener un paciente por ID
     getPacienteById: async (id: string) => {
         try {
             const response = await fetch(`${BASE_URL}/get/${id}`);
@@ -32,7 +28,6 @@ export const PacienteService = {
         }
     },
 
-    // Agregar un nuevo paciente
     addPaciente: async (paciente: any) => {
         try {
             const response = await fetch(`${BASE_URL}/add`, {
@@ -50,7 +45,6 @@ export const PacienteService = {
         }
     },
 
-    // Eliminar un paciente por ID
     deletePaciente: async (id: string) => {
         try {
             const response = await fetch(`${BASE_URL}/delete/${id}`, { method: "DELETE" });
@@ -63,7 +57,6 @@ export const PacienteService = {
         }
     },
 
-    // Obtener citas por ID de paciente
     getCitasByPacienteId: async (id: string) => {
         try {
             const response = await fetch(`${BASE_URL}/citas/${id}`);
@@ -77,7 +70,6 @@ export const PacienteService = {
         }
     },
 
-    // Agregar una cita
     addCita: async (cita: any) => {
         try {
             const response = await fetch(`http://localhost:8080/api/cita/add`, {
@@ -95,7 +87,6 @@ export const PacienteService = {
         }
     },
 
-    // Eliminar una cita por ID
     deleteCita: async (id: string) => {
         try {
             const response = await fetch(`${BASE_URL}/delete/cita/${id}`, { method: "DELETE" });
