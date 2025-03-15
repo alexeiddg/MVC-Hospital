@@ -21,6 +21,7 @@ public class AdministradorController {
     // Medicos Workflow
     @GetMapping("/medicos")
     public ResponseEntity<List<Medico>> getAllMedicos() {
+        System.out.println("getAllMedicos");
         return ResponseEntity.ok(administradorService.getAllMedicos());
     }
 
