@@ -4,28 +4,27 @@ import React, { useState, useEffect } from 'react';
 import { AdministradorService } from '../../../services/administradorService';
 
 export default function AdminView() {
-  // State for doctors and administrators
+
   const [doctors, setDoctors] = useState([]);
   const [administrators, setAdministrators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // State for new user form
+
   const [newUser, setNewUser] = useState({ 
     name: '', 
     email: '', 
     role: 'Doctor',
-    specialty: '', // For doctors
-    department: '' // For administrators
+    specialty: '',
+    department: '' 
   });
 
-  // Fetch all doctors and administrators on component mount
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
         
-        // Fetch doctors and administrators in parallel
         const [doctorsData, adminsData] = await Promise.all([
           AdministradorService.getAllMedicos(),
           AdministradorService.getAllAdministradores()
@@ -50,24 +49,22 @@ export default function AdminView() {
     
     try {
       if (newUser.role === 'Doctor') {
-        // Create doctor object with required fields
+
         const medicoData = {
           nombre: newUser.name,
           email: newUser.email,
           especialidad: newUser.specialty || 'General'
-          // Add other required fields for your Doctor model
         };
         
         await AdministradorService.addMedico(medicoData);
         const updatedDoctors = await AdministradorService.getAllMedicos();
         setDoctors(updatedDoctors);
       } else {
-        // Create administrator object with required fields
+ 
         const adminData = {
           nombre: newUser.name,
           email: newUser.email,
           departamento: newUser.department || 'General'
-          // Add other required fields for your Administrador model
         };
         
         await AdministradorService.addAdministrador(adminData);
@@ -75,7 +72,6 @@ export default function AdminView() {
         setAdministrators(updatedAdmins);
       }
       
-      // Reset form
       setNewUser({ 
         name: '', 
         email: '', 
@@ -104,7 +100,6 @@ export default function AdminView() {
     }
   };
 
-  // Show additional fields based on role selection
   const renderRoleSpecificFields = () => {
     if (newUser.role === 'Doctor') {
       return (

@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { PacienteService } from '../../../services/pacienteService'; // Importing the individual functions directly
+import { PacienteService } from '../../../services/pacienteService'; 
 
 export default function PacienteView() {
-  const  id  = 3; // Obtener ID dinámico del paciente
+  const  id  = 3;
 
   const [appointments, setAppointments] = useState([]);
   const [medicalHistory, setMedicalHistory] = useState([]);
@@ -20,7 +20,7 @@ export default function PacienteView() {
 
   const fetchAppointments = async (patientId) => {
     try {
-      const data = await PacienteService.getCitasByPacienteId(patientId); // Using PacienteService
+      const data = await PacienteService.getCitasByPacienteId(patientId); 
       setAppointments(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -30,7 +30,7 @@ export default function PacienteView() {
 
   const fetchMedicalHistory = async (patientId) => {
     try {
-      const paciente = await PacienteService.getPacienteById(patientId); // Using PacienteService
+      const paciente = await PacienteService.getPacienteById(patientId); 
       setMedicalHistory(paciente.historial_medico ? JSON.parse(paciente.historial_medico) : []);
     } catch (error) {
       console.error('Error fetching medical history:', error);
@@ -49,7 +49,7 @@ export default function PacienteView() {
           pacienteId: id,
         };
   
-        console.log("Sending appointment:", newAppointment); // <-- Agrega esto
+        console.log("Sending appointment:", newAppointment); 
   
         await PacienteService.addCita(newAppointment);
         fetchAppointments(id);

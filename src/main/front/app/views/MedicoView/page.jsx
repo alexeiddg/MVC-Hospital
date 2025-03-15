@@ -12,13 +12,11 @@ export default function MedicoView() {
   const [prescription, setPrescription] = useState('');
 
   const handleAttendPatient = (patient) => {
-    // atender_paciente() implementation
     setSelectedPatient(patient);
   };
 
   const handlePrescribe = (e) => {
     e.preventDefault();
-    // recetar_medicacion() implementation
     if (selectedPatient && prescription) {
       const updatedPatients = patients.map(p => 
         p.id === selectedPatient.id ? {...p, medication: prescription} : p
